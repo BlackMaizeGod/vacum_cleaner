@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cleaner find{% endblock %}
+
+{% block body %}
+    <div class="d-flex">
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr class="text-center">
+                    <th>Id</th>
+                    <th>Avatar</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cleaner in cleaners %}
+                    <tr class="text-center">
+                        <td class="p-4">{{ cleaner.id }}</td>
+                        <td><img class="img" src="{{ asset(cleaner.avatar) }}" alt=""> </td>
+                        <td class="p-4">{{ cleaner.brand }}</td>
+                        <td class="p-4">{{ cleaner.model }}</td>
+                        <td class="p-3">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Description
+                                </button>
+                                <div class="dropdown-menu">
+                                    <p class="text-center">{{ cleaner.description }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">{{ cleaner.price }}$</td>
+                        <td class="p-3">
+                            <div class="d-flex flex-row justify-content-center">
+                                <form method="post" action="{{ path('cleaner_delete', {'id': cleaner.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cleaner.id) }}">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                                <div class="m-2"></div>
+                                <a class="btn btn-info" href="{{ path('cleaner_edit', {'id': cleaner.id}) }}">edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="text-center">
+                        <td colspan="7">
+                            <h1>no records found</h1>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

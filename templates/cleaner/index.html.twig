@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cleaner index{% endblock %}
+
+{% block body %}
+    <div class="d-flex">
+        <div class="m-3"></div>
+        <div class="card">
+            <div class="card-header">
+                <h1>Search page</h1>
+            </div>
+            {{ form_start(searchForm,{action: path('search_find')}) }}
+            <div class="card-body">
+                {{ form_row(searchForm.string) }}
+                {{ form_row(searchForm.minPrice) }}
+                {{ form_row(searchForm.maxPrice) }}
+                {{ form_row(searchForm.category) }}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-block btn-info">SEARCH!!!</button>
+            </div>
+            {{ form_end(searchForm) }}
+        </div>
+        <div class="container m-l-20">
+            <table class="table">
+                <thead>
+                <tr class="text-center">
+                    <th>Id</th>
+                    <th>Avatar</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cleaner in cleaners %}
+                    <tr class="text-center">
+                        <td class="p-4">{{ cleaner.id }}</td>
+                        <td><img class="img" src="{{ asset(cleaner.avatar) }}" alt=""> </td>
+                        <td class="p-4">{{ cleaner.brand }}</td>
+                        <td class="p-4">{{ cleaner.model }}</td>
+                        <td class="p-3">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Description
+                                </button>
+                                <div class="dropdown-menu">
+                                    <p class="text-center">{{ cleaner.description }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">{{ cleaner.price }}$</td>
+                        <td class="p-3">
+                            <div class="d-flex flex-row justify-content-center">
+                                <form method="post" action="{{ path('cleaner_delete', {'id': cleaner.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cleaner.id) }}">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                                <div class="m-2"></div>
+                                <a class="btn btn-info" href="{{ path('cleaner_edit', {'id': cleaner.id}) }}">edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-block btn-success" href="{{ path('cleaner_new') }}">Create new</a>
+            <div class="d-flex flex-row justify-content-center m-4">
+                <div>{{ pagerfanta(pager, 'twitter_bootstrap4', { 'omitFirstPage': true}) }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

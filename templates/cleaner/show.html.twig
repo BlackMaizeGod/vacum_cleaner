@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cleaner{% endblock %}
+
+{% block body %}
+    <h1>Cleaner</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cleaner.id }}</td>
+            </tr>
+            <tr>
+                <th>Avatar</th>
+                <td style="width: 50px; height: 50px"><img src="{{ asset(cleaner.avatar) }}" alt=""></td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ cleaner.price }}</td>
+            </tr>
+            <tr>
+                <th>Brand</th>
+                <td>{{ cleaner.brand }}</td>
+            </tr>
+            <tr>
+                <th>Model</th>
+                <td>{{ cleaner.model }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cleaner_index') }}">back to list</a>
+
+    <a href="{{ path('cleaner_edit', {'id': cleaner.id}) }}">edit</a>
+
+    {{ include('cleaner/_delete_form.html.twig') }}
+{% endblock %}
