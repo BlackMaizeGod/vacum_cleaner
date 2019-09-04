@@ -23,7 +23,9 @@ class SearchType extends AbstractType
                'class'=>Categories::class,
                'choice_label'=>'name',
            ])
-            ->add('string', TextType::class)
+            ->add('string', TextType::class,[
+                'required' => false,
+            ])
            ;
     }
 
