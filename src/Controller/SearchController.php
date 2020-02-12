@@ -26,7 +26,7 @@ class SearchController extends AbstractController
         $searchForm->handleRequest($request);
         $cleaners=[];
         if ($searchForm->isSubmitted() && $searchForm->isValid()){
-            $cleaners= $cleanerRepository->findByDiff($search->getString(),$search->getCategory()->getId(),$search->getMaxPrice(),$search->getMinPrice());
+            $cleaners= $cleanerRepository->findByDiff($search->getString(),($category = $search->getCategory() ) === null ? '' : $category->getId() ,$search->getMaxPrice(),$search->getMinPrice());
         }
         return $this->render('search_controller/index.html.twig', [
             'cleaners' => $cleaners,

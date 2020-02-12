@@ -28,18 +28,30 @@ class CleanerRepository extends ServiceEntityRepository
 
     public function findByDiff($string, $category, $maxPrice, $minPrice)
     {
-        return $this->createQueryBuilder('c')
-            ->select('c')
-            ->where('c.brand like :string')
-            ->orWhere('c.model like :string')
-            ->setParameter('string', $string)
-            ->orWhere('c.category=:category')
-            ->setParameter('category', $category)
-            ->andWhere('c.price <= :maxPrice')
-            ->setParameter('maxPrice', $maxPrice)
-            ->andWhere('c.price >= :minPrice')
-            ->setParameter('minPrice', $minPrice)
-            ->getQuery()
+        if($category === '' && $string === '' && $maxPrice === '' && $minPrice === ''){
+            return $this->findAll();
+        }
+        $query = $this->createQueryBuilder('c')
+            ->select('c');
+            if($string !== null) {
+                $query->where('c.brand like :string')
+                    ->orWhere('c.model like :string')
+                    ->setParameter('string', $string);
+            }
+            if($category !== '') {
+                $query->andWhere('c.category=:category')
+                    ->setParameter('category', $category);
+            }
+            if($maxPrice !== null) {
+                $query->andWhere('c.price <= :maxPrice')
+                    ->setParameter('maxPrice', $maxPrice);
+            }
+            if($minPrice) {
+                $query->andWhere('c.price >= :minPrice')
+                    ->setParameter('minPrice', $minPrice);
+            }
+
+           return $query->getQuery()
             ->getResult();
     }
 

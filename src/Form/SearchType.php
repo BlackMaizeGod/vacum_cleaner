@@ -17,11 +17,17 @@ class SearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           ->add('minPrice',NumberType::class)
-           ->add('maxPrice',NumberType::class)
+           ->add('minPrice',NumberType::class,[
+               'required' => false,
+           ])
+           ->add('maxPrice',NumberType::class,[
+               'required' => false,
+           ])
            ->add('category', EntityType::class,[
-               'class'=>Categories::class,
+               'class' => Categories::class,
                'choice_label'=>'name',
+               'placeholder' => 'Choose an option',
+               'required' => false, 
            ])
             ->add('string', TextType::class,[
                 'required' => false,
